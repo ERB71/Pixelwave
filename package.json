@@ -1,0 +1,42 @@
+{
+  "name": "pixelwave",
+  "version": "1.0.0",
+  "description": "Repo for storing files in creation of Pixelwave site as part of my Responsive Full Stack Web Development Assignment 2",
+  "private": true,
+  "type": "module",
+  "author": "Elliott Scott",
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.12.2",
+    "@mui/styled-engine": "^5.12.0",
+    "@mui/system": "^5.12.1",
+    "axios": "^1.3.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mysql2": "^3.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
