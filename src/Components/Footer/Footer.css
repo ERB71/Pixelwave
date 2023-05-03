@@ -1,5 +1,19 @@
 footer {
-    margin-top: auto;
-    align-self: center;
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    left: 0;
+    height: 23px;
+    width: 100%;
+    justify-content: center;
+    background-color: blue;
+    border-top: 2px solid #f00;
+    color: #fff;
+    font-size: 20px;
+}
 
+body{
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 25px;
 }

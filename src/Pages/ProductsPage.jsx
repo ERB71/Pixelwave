@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Grid, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import axios from "axios";
+import Header from "../Components/Header/Header"
+import Footer from "../Components/Footer/Footer";
 
 function ProductListing() {
   const [products, setProducts] = useState([]);
@@ -16,6 +18,7 @@ function ProductListing() {
 
     return (
       <div>
+        <Header />
         <h2>Products</h2>
         <Grid container rowSpacing={{xs: 1, sm: 2, md: 3}} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           {products.map((product) => (
@@ -41,6 +44,7 @@ function ProductListing() {
             </Grid>
           ))}
         </Grid>
+         <Footer />
       </div>
     );
 }

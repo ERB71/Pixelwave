@@ -1,14 +1,18 @@
-import React from "react";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { AppBar, Toolbar } from "@mui/material";
+import { Link } from 'react-router-dom';
+import Navbar from "../Navbar/Navbar";
+import logo from "./PixelWave.png"
 
 function Header() {
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{backgroundColor: "white"}}>
       <Toolbar>
-        <Typography>
-          Pixelwave Football Merchandising
-        </Typography>
+        <Link to="/home">
+          <img src = { logo } alt = "PixelWave Logo" height={"100px"}/>
+        </Link>
       </Toolbar>
+      <Navbar />
     </AppBar>
   );
 }
