@@ -9,7 +9,7 @@ function Header() {
     <AppBar position="static" style={{backgroundColor: "white"}}>
       <Toolbar>
         <Link to="/home">
-          <img src = { logo } alt = "PixelWave Logo" height={"100px"}/>
+          <img src = { logo } alt = "PixelWave Logo" width = {"40%"}/>
         </Link>
       </Toolbar>
       <Navbar />

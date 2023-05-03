@@ -26,7 +26,7 @@ function ProductDetail() {
   return (
     <div>
       <Header />
-      <Grid xs = {4}>
+      <Grid>
         {product.map((product) => (
           <Grid item key={product.id} xs={12} sm={6} md={4}>
               <Card
@@ -36,12 +36,11 @@ function ProductDetail() {
                   overflow: "visible"
                 }} >
 
-                <CardMedia
+                <CardMedia 
                   component="img"
                   sx = {{
-                    heigh: "45%",
                     width: "45%",
-                    objectFit: "contain"
+                    objectFit: "fit"
                   }}
                   image={product.image}
                   alt={product.name}
@@ -50,6 +49,14 @@ function ProductDetail() {
                   <Typography variant="h1" fontSize={"4vw"} textAlign={'Right'}>
                     {product.name}
                   </Typography>
+                  <br />
+                  <Typography variant="h1" fontSize={"2vw"} textAlign={'Right'}>
+                    {product.categories}
+                  </Typography>
+                  <Typography variant="h1" fontSize={"2vw"} textAlign={'Right'}>
+                    {product.colours}
+                  </Typography>
+                  <br />
                   <Typography variant="h1" fontSize={"3vw"} textAlign={'Right'}>
                     £{product.price}
                   </Typography>

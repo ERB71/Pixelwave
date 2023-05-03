@@ -24,10 +24,18 @@ function ProductListing() {
           {products.map((product) => (
             <Grid item key={product.id} xs={12} sm={6} md={4}>
               <Link to={`/product/${product.productID}`} style={{ textDecoration: 'none' }}>
-                <Card variant = "outlined">
+                <Card 
+                sx = {{
+                  variant: "outlined",
+                  height: "400px"
+                }}
+                >
                   <CardMedia
                     component="img"
-                    height="500"
+                    sx = {{
+                      height: "300px",
+                      objectFit: "contain"
+                    }}
                     image={product.image}
                     alt={product.name}
                   />
