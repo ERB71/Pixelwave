@@ -5,12 +5,12 @@ import axios from "axios";
 import Header from "../Components/Header/Header"
 import Footer from "../Components/Footer/Footer";
 
-function ProductListing() {
+function BootsListing() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const getProducts = async () => {
-        let query = await axios.get("http://localhost:3001/getProducts");
+        let query = await axios.get("http://localhost:3001/getBoots");
         setProducts(query.data);
         }
         getProducts();
@@ -19,8 +19,10 @@ function ProductListing() {
     return (
       <div>
         <Header />
-        <h2>Products</h2>
-        <Grid container rowSpacing={{xs: 1, sm: 2, md: 3}} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <br />
+        <Typography color={"blue"} fontSize={"3vw"} fontWeight={"bold"} style={{ textAlign: "center" }}> BOOTS </Typography>
+        <br />
+        <Grid container rowSpacing={{xs: 1, sm: 2, md: 3}} columnSpacing={{ xs: 1, sm: 2, md: 3 }} border={"2px solid red"}>
           {products.map((product) => (
             <Grid item key={product.id} xs={12} sm={6} md={4}>
               <Link to={`/product/${product.productID}`} style={{ textDecoration: 'none' }}>
@@ -57,4 +59,4 @@ function ProductListing() {
     );
 }
 
-export default ProductListing;
+export default BootsListing;

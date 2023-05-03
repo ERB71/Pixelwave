@@ -17,7 +17,7 @@ app.use(
     })
 );
 
-app.get("/getProducts", (req, res) => {
+app.get("/getShirts", (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
         user: process.env.DATABASE_USERNAME,
@@ -25,7 +25,29 @@ app.get("/getProducts", (req, res) => {
         password: process.env.DATABASE_PASSWORD,
     })
 
-    const query = "SELECT * from Products where StockLevel > 0";
+    const query = "SELECT * from Products where categories like '%Shirts%' AND StockLevel > 0";
+
+    dbConnection.query(query, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            console.log(data);
+            res.status(200).send(data);
+        }
+        dbConnection.end();
+    });
+});
+
+app.get("/getBoots", (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    const query = "SELECT * from Products where categories like '%Boots%' AND StockLevel > 0";
 
     dbConnection.query(query, (err, data) => {
         if (err){

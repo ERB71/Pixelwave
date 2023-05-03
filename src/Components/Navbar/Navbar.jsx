@@ -10,6 +10,11 @@ function Navbar() {
               Shirts
             </a>
           </li>
+          <li className="nav-item">
+            <a href="/boots" className="nav-link">
+              Boots
+            </a>
+          </li>
         </ul>
       </nav>
     );

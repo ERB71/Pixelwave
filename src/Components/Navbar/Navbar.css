@@ -1,7 +1,7 @@
 .navbar {
     background-color: blue;
     border: 2px solid #f00;
-    width: 100%;
+    width: (100% - 4);
   }
   
   .navbar-nav {
