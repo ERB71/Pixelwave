@@ -1,39 +1,40 @@
-import { Typography } from "@mui/material";
-import { borderBottom, borderColor, display } from "@mui/system";
+import { Button, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
+import ImageGrid from "./ImageGrid";
 
 function HomeBody(){
     return(
         <div style={{background:"white", borderLeft: "2px solid red", borderRight: "2px solid red"}}>
-            <div id= "shirts" style={{background:"blue", paddingBottom: "5px", borderBottom: "2px solid red"}}>
-                <Typography color = {"white"} fontSize={"2vw"} fontWeight={"bold"} display = {"flex"} justifyContent={"center"}> The Biggest English and European Teams, as well as select National Teams available now</Typography>    
+            <div id= "shirts" style={{background:"blue", paddingBottom: "5px", borderTop: "2px solid red", borderBottom: "2px solid red", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+                <Typography color = {"white"} fontSize={"2vw"} fontWeight={"bold"} style={{ maxWidth: "70%", textAlign: "center" }}>
+                     The Biggest English And European Teams, As Well As Select National Teams Available Now
+                </Typography>    
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Link to={"/shirts"}>
-                        <button> Shop Shirts </button>
+                        <Button variant = "contained" sx={{ backgroundColor: '#F00', color: 'white', border: "1px solid white",
+                        "&:hover": { backgroundColor: "white", color: "blue", border: "1px solid red"}}}> Shop Shirts </Button>
                     </Link>
                 </div>
             </div>
             <br />
             <br />
-            <div id="boots" style={{ paddingBottom: "5px", borderBottom: "2px solid red", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-                <Typography color={"blue"} fontSize={"3vw"} fontWeight={"bold"} style={{ textAlign: "center" }}>
-                    Boots
+            <div id="boots" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingBottom: "10px"}}>
+                <Typography color={"blue"} fontSize={"2.5vw"} fontWeight={"bold"} style={{ textAlign: "center" }}>
+                    BOOTS
                 </Typography>
-                <Typography color={"blue"} fontSize={"2vw"} fontWeight={"bold"} style={{ maxWidth: "750px", textAlign: "center" }}>
-                    Get your hands on the boots designed for the best in the world and elevate your game to the next level
+                <Typography color={"blue"} fontSize={"2vw"} fontWeight={"bold"} style={{ maxWidth: "70%", textAlign: "center" }}>
+                    Get Your Hands On The Boots Designed For The Best In The World And Elevate Your Game To The Next Level
                 </Typography>
+                <br />
+                <ImageGrid />
+                <br />
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <Link to={"/boots"}>
-                    <button>Shop Boots</button>
+                        <Button variant = "contained" sx={{ backgroundColor: 'blue', color: 'white', border: "1px solid red",   
+                            "&:hover": { backgroundColor: 'red', border: "1px solid blue"}}}>Shop Boots</Button>
                     </Link>
                 </div>
             </div>
-
-
-
-
-
-
         </div>
 
     )

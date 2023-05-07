@@ -10,7 +10,7 @@ const Carousel = () => {
         { id: 1, src: require("./Images/England.jpg"), alt: "England Mens Home Shirt"},
         { id: 2, src: require("./Images/City.jpg"), alt: "Manchester City Home Shirt" },
         { id: 3, src: require("./Images/Arsenal.jpg"), alt: "Arsenal Home Shirt" },
-        { id: 4, src: require("./Images/Dortmund.jpg"), alt: "Borussia Dortmund Home Shirt" },
+        { id: 4, src: require("./Images/Bayern.jpg"), alt: "Bayern Munich Home Shirt" },
     ];
 
     const settings = {

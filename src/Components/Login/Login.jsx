@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { Alert } from "@mui/material"
+import { Alert, Typography } from "@mui/material"
 import Snackbar from "@mui/material/Snackbar";
 import "./Login.css"
 import logo from "../Header/PixelWave.png"
@@ -86,12 +86,16 @@ function Login() {
                onChange = { (e) => {
                   setLoginEmailAddress (e.target.value);
                }}
-            /> <br/>
+            /> 
+            <Typography>Hint: admin@Pixelwave.com</Typography>
+            <br/>
             <input type="password" placeholder="Password…" 
                onChange = { (e) => {
                   setLoginPassword (e.target.value);
                }}
-            /> <br/>
+            /> 
+            <Typography>Hint: admin123</Typography>
+            <br/>
             <button onClick={login} >Login</button>
          </div>
          <Snackbar open={alertOpen} autoHideDuration={3000} onClose={handleAlertClose}>

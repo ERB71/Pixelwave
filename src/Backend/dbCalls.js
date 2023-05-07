@@ -216,7 +216,7 @@ app.post('/user/createAdmin', (req, res) => {
         password: process.env.DATABASE_PASSWORD,
     })
     
-    const emailAddress = "admin@localhost";
+    const emailAddress = "admin@Pixelwave.com";
     const plaintextPassword = "admin123";
     const role = "admin"
 
