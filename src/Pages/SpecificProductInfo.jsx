@@ -64,11 +64,12 @@ function ProductDetail() {
                     £{product.price}
                   </Typography>
                   <br />
-                  <div display = "flex">
-                    <select style={{height: "100%", marginRight: "10px"}} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))}>
+                  <div style = {{display: "flex"}}>
+                    <Typography color = {"blue"} display = {"flex"} fontSize={"2vw"} lineHeight = {"100%"} alignItems={"center"} paddingRight = {"1px"}> Quantity</Typography>
+                    <select style={{height: "100%", border: "1px solid blue", color: "blue", marginRight: "10px"}} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))}>
                       {quantityOptions.map((option) => (
                           <option key={option} value={option}>
-                          Quantity: {option}
+                          {option}
                           </option>
                       ))}
                     </select>
