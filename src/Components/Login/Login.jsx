@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { Alert, Typography } from "@mui/material"
+import { Alert, Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
-import "./Login.css"
-import logo from "../Header/PixelWave.png"
+import "./Login.css";
+import logo from "../Header/PixelWave.png";
 
 function Login() {
    try{
@@ -38,6 +38,7 @@ function Login() {
          let query = await axios.post(`http://localhost:3001/user/register?emailAddress=${emailAddressReg}&password=${passwordReg}`);
          console.log(query.data);
          setAlertMessage({severity:"success", message: "User Registered"})
+         localStorage.setItem('email', emailAddressReg)
          navigate('/home')
       }
       catch{
@@ -51,6 +52,7 @@ function Login() {
          let query = await axios.get(`http://localhost:3001/user/login?emailAddress=${emailAddress}&password=${password}`);
          console.log(query.data);
          setAlertMessage({severity:"success", message: "User Found, Logging In..."})
+         localStorage.setItem('email', emailAddress)
          navigate('/home')
       }
       catch{

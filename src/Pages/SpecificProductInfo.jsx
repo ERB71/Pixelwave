@@ -4,11 +4,15 @@ import { Grid, Card, CardContent, CardMedia, Typography, Button } from "@mui/mat
 import axios from "axios";
 import Header from "../Components/Header/Header";
 import Footer from "../Components/Footer/Footer";
+import { height } from "@mui/system";
 
 
 function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState({});
+
+  const [quantity, setQuantity] = useState(1);
+  const quantityOptions = [1, 2, 3, 4, 5];
 
   useEffect(() => {
     const getProduct = async () => {
@@ -45,7 +49,7 @@ function ProductDetail() {
                   image={product.image}
                   alt={product.name}
                 />
-                <CardContent>
+                <CardContent sx = {{display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                   <Typography variant="h1" fontSize={"4vw"} textAlign={'Right'}>
                     {product.name}
                   </Typography>
@@ -56,13 +60,23 @@ function ProductDetail() {
                   <Typography variant="h1" fontSize={"2vw"} textAlign={'Right'}>
                     {product.colours}
                   </Typography>
-                  <br />
                   <Typography variant="h1" fontSize={"3vw"} textAlign={'Right'}>
                     £{product.price}
                   </Typography>
+                  <br />
+                  <div display = "flex">
+                    <select style={{height: "100%", marginRight: "10px"}} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))}>
+                      {quantityOptions.map((option) => (
+                          <option key={option} value={option}>
+                          Quantity: {option}
+                          </option>
+                      ))}
+                    </select>
+                    <Button variant = "contained" sx={{ backgroundColor: 'blue', color: 'white', border: "1px solid red",   
+                    "&:hover": { backgroundColor: 'red', border: "1px solid blue"}}}>Add To Basket</Button>
+                  </div>
                 </CardContent>
               </Card>
-              
           </Grid>
         ))}
       </Grid>
