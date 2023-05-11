@@ -5,6 +5,7 @@ import HomePage from './Pages/HomePage.jsx';
 import ShirtsListing from './Pages/ShirtsPage.jsx';
 import BootsListing from './Pages/BootsPage.jsx';
 import ProductDetail from './Pages/SpecificProductInfo.jsx';
+import Basket from './Pages/Basket.jsx';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/shirts" element={<ShirtsListing />} />
         <Route path="/boots" element={<BootsListing />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/basket" element={<Basket />} />
       </Routes>
     </Router>
   );

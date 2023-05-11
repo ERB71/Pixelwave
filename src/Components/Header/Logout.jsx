@@ -16,7 +16,7 @@ function Logout() {
   }
 
   return (
-    <Button variant = "contained" sx={{ backgroundColor: 'blue', color: 'white', border: "1px solid red",   
+    <Button variant = "contained" sx={{ backgroundColor: 'blue', color: 'white', border: "1px solid red", fontSize: "2vw",   
     "&:hover": { backgroundColor: 'red', border: "1px solid blue"}}}
     onClick={handleLogout} disabled={isLoggingOut}>
       {isLoggingOut ? 'Logging out...' : 'Logout'}

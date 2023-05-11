@@ -10,10 +10,10 @@ function BootsListing() {
 
   useEffect(() => {
     const getProducts = async () => {
-        let query = await axios.get("http://localhost:3001/getBoots");
-        setProducts(query.data);
-        }
-        getProducts();
+      let query = await axios.get("http://localhost:3001/getBoots");
+      setProducts(query.data);
+    }
+    getProducts();
   }, []);
 
     return (

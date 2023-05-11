@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { Alert, Typography } from "@mui/material";
+import { Alert, Button, Typography } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import "./Login.css";
 import logo from "../Header/PixelWave.png";
 
 function Login() {
-   try{
-      axios.post(`http://localhost:3001/user/createAdmin`);
-   }
-   catch{
-      console.log("error creating admin")
-   }
-
+   //Query to create default admin user
+   useEffect(() => {
+      const createAdmin = async() => {
+         try{
+            axios.post(`http://localhost:3001/user/createAdmin`);
+         }
+         catch{
+            console.log("error creating admin")
+         }
+      }
+      createAdmin()
+   }, []);
 
    const [emailAddressReg, setEmailAddressReg] = useState("");
    const [passwordReg, setPasswordReg] = useState ("");
@@ -80,7 +85,8 @@ function Login() {
                   setPasswordReg(e.target.value);
                }}
             /> <br/>
-            <button onClick={register}> Register</button>
+               <Button variant = "contained" sx={{ backgroundColor: 'blue', color: 'white', border: "1px solid red",   
+               "&:hover": { backgroundColor: 'red', border: "1px solid blue"}}} onClick={register}> Register </Button>
          </div> <br/>
          <div className="login">
             <h1>Login</h1>
@@ -98,7 +104,8 @@ function Login() {
             /> 
             <Typography>Hint: admin123</Typography>
             <br/>
-            <button onClick={login} >Login</button>
+            <Button variant = "contained" sx={{ backgroundColor: 'blue', color: 'white', border: "1px solid red",   
+            "&:hover": { backgroundColor: 'red', border: "1px solid blue"}}} onClick={login} > Login </Button>
          </div>
          <Snackbar open={alertOpen} autoHideDuration={3000} onClose={handleAlertClose}>
             <Alert severity={ alertMessage.severity } sx={{width: "100%"}} > 

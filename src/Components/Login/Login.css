@@ -1,33 +1,35 @@
 .App {
-    text-align: center;
- }
-  
- .registration {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
- }
-  
- .login {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
- }
- input {
-    width: 250px;
-    height: 40px;
- }
+   text-align: center;
+   margin-bottom: 5px;
+}
 
- .logo {
-    justify-content: center;
- }
+.registration {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
 
- h1 {
-    color: blue;
- }
+.login {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   min-height: 100%;
+}
+input {
+   width: 250px;
+   height: 40px;
+}
 
- label {
-    color: blue;
- }
+.logo {
+   justify-content: center;
+}
+
+h1 {
+   color: blue;
+}
+
+label {
+   color: blue;
+}

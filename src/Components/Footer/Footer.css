@@ -9,5 +9,6 @@ footer {
     background-color: blue;
     border-top: 2px solid #f00;
     color: #fff;
-    font-size: 20px;
+    font-size: 15px;
+    align-items: center;
 }

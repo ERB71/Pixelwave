@@ -1,0 +1,11 @@
+@media (max-width: 600px) {
+  .MuiGrid-item {
+    width: 100% !important;
+  }
+  .MuiBox-root {
+    flex-direction: column;
+  }
+  .MuiCard-root {
+    justify-content: space-between;
+  }
+}
