@@ -29,6 +29,7 @@ function RoleManagement() {
 
     const promoteUser = async (id) => {
         try{
+            //Query to update a user's role to admin
             await axios.post(`http://localhost:3001/admin/upgradeUser`, {
                 userID: id
             });
@@ -43,6 +44,7 @@ function RoleManagement() {
 
     const deleteUser = async (id) => {
         try{
+            //query to delete a user
             await axios.post(`http://localhost:3001/admin/deleteUser`, {
                 userID: id
             });
@@ -56,7 +58,7 @@ function RoleManagement() {
     }
 
 
-    //Depending on the value of historyData, either the transaction User is displayed, or a message is shown explaining that there are no transactions to display
+    //Depending on the value of userData, either a list of non-admin users are displayed, or a message is shown explaining that there are no users to display
     return(
         <div>
             <Typography variant="h1" fontSize={"3vw"} textAlign={"center"} backgroundColor={"blue"} color={"white"} border={"2px solid red"}> Role Management </Typography>

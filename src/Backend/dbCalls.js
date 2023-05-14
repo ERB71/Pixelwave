@@ -677,17 +677,26 @@ app.post('/admin/deleteUser', (req, res) => {
 
     const userId = req.body["userID"] 
 
-    let query = `delete from user where userId = ?`;
-    let queryParam = userId;
+    //Deletes any basket items the user has
+    const basketQuery = `delete from basket where userId = ?`;
+    const queryParam = userId;
 
-    dbConnection.query(query, queryParam, (err, data) => {
+    dbConnection.query(basketQuery, queryParam, (err, data) => {
         if (err){
             res.status(404).send(err);
         }
         else{
-            res.status(200).send(data);
+            //Deletes user
+            const userQuery = `delete from user where userId = ?`;
+            dbConnection.query(userQuery, queryParam, (err, data) => {
+                if (err){
+                    res.status(404).send(err);
+                }
+                else{
+                    res.status(200).send(data);
+                }
+            });
         }
-        dbConnection.end();
     })
 })
 
