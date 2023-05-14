@@ -2,6 +2,7 @@ import { Button, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
 import ImageGrid from "./ImageGrid";
 
+//This function simply defines the main body content for the home page, including the buttons to link to other pages
 function HomeBody(){
     return(
         <div style={{background:"white", borderLeft: "2px solid red", borderRight: "2px solid red"}}>

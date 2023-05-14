@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 
 const Carousel = () => {
+    //Defeins the images to be included in the carousel
     const images = [
         { id: 1, src: require("./Images/England.jpg"), alt: "England Mens Home Shirt"},
         { id: 2, src: require("./Images/City.jpg"), alt: "Manchester City Home Shirt" },
@@ -13,6 +14,7 @@ const Carousel = () => {
         { id: 4, src: require("./Images/Dortmund.jpg"), alt: "Borussia Dortmund Home Shirt" },
     ];
 
+    //Defines the settings for the carousel
     const settings = {
       infinite: true,
       speed: 500,

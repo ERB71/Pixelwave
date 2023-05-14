@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@mui/material";
 
+//This function contains all of the logic to handle the logging out process
 function Logout() {
   const navigate = useNavigate();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  //This function removes all items from browser related to the current session, and redirects the user back to logic page
   const handleLogout = () => {
     setIsLoggingOut(true);
     localStorage.removeItem('token');

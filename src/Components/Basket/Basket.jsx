@@ -20,19 +20,8 @@ function BasketContent() {
         }
         setAlertOpen(false)
     }
-    
-    const determineDeliveryCost = async(basketTotal) => {
-        let newDeliveryFee = 4.99
-        if (basketTotal > 49.99){
-            newDeliveryFee = 0
-        }
-        setDeliveryFee(newDeliveryFee);
-        setOrderTotal((basketTotal + newDeliveryFee).toFixed(2));
-    };
-    useEffect(() => {
-        getBasket();
-    }, []);
 
+    //Query to retrieve the contents of the user's basket
     const getBasket = async () => {
         try {
             const userIdQuery = await axios.get(
@@ -40,20 +29,21 @@ function BasketContent() {
             );
             const userId = userIdQuery.data[0].userId;
 
-        
+            //This query gets the basket contents for the corresponding user
             const basketQuery = await axios.get(`http://localhost:3001/basket/getBasket?userId=${userId}`);
             const basketItems = basketQuery.data;
         
             const updatedProducts = [];
             let basketTotal = 0;
         
+            //This loop is then used to convert each productId retrieved into an actual product to be displayed
             for (let i = 0; i < basketItems.length; i++) {
                 const item = basketItems[i];
                 const productId = item.productId;
                 const quantity = item.quantity;
         
                 try {
-                    // make a request to retrieve the product details
+                    //  make a request to retrieve the product details
                     const productQuery = await axios.get(`http://localhost:3001/getSpecificProduct/${productId}`);
                     const product = productQuery.data[0];
             
@@ -94,13 +84,14 @@ function BasketContent() {
     }, []);
 
 
-
+    //Function to reduce the number of items in the basket
     const decrementBasketItem = async (id, quantity) => {
         try {
             const userIdQuery = await axios.get(
                 `http://localhost:3001/user/getUserId?emailAddress=${localStorage.getItem("email")}`
             );
             const userId = userIdQuery.data[0].userId;
+            //This query is the one that reduces the quantity. On the backend, there is a check that is perfomred if the quantity reaches 0. If this occurs, the tem is removed from the basket
             await axios.post(`http://localhost:3001/basket/reduceCount`, {
                 userID: userId,
                 productID: id,
@@ -115,7 +106,7 @@ function BasketContent() {
         }
     };
 
-
+    //Function to increase the quantity of an item in a user's basket by one
     const incrementBasketItem = async (id, quantity) => {
         try{
             const userIdQuery = await axios.get(
@@ -131,6 +122,7 @@ function BasketContent() {
             let stockLevel = updateQuery.data[0].tempStockLevel;
             console.log(stockLevel);
 
+            //Based uponthe response of the query, the basket quantity is either incremented, or - if the maximum number is already included - the quantity is reduced again and the user has the reason for this explained
             if (stockLevel === 0) {
                 decrementBasketItem(id, updatedQuantity);
                 setAlertMessage({ severity: "info", message: "Maximum Number of Items Already in Basket" });
@@ -144,12 +136,15 @@ function BasketContent() {
         };
     }
 
+    //Function which removes an item from a users basket
     const deleteBasketItem = async (id) => {
         try{
+            //Queryto retrieve the user's ID using the email address stored in browser storage
             const userIdQuery = await axios.get(
                 `http://localhost:3001/user/getUserId?emailAddress=${localStorage.getItem("email")}`
             );
             const userId = userIdQuery.data[0].userId;
+            //Query to remove the item the correct user's item basket
             await axios.post(`http://localhost:3001/basket/deleteBasketItem`, {
                 userID: userId,
                 productID: id,
@@ -161,6 +156,19 @@ function BasketContent() {
             setAlertMessage({ severity: "error", message: "Error Updating Basket"})
         };
     }
+
+    //Function that determines the delivery cost based upon the basket's value
+    const determineDeliveryCost = async(basketTotal) => {
+        let newDeliveryFee = 4.99
+        if (basketTotal > 49.99){
+            newDeliveryFee = 0
+        }
+        setDeliveryFee(newDeliveryFee);
+        setOrderTotal((basketTotal + newDeliveryFee).toFixed(2));
+    };
+    useEffect(() => {
+        getBasket();
+    }, []);
 
     return (
         <div>

@@ -7,6 +7,7 @@ import Logout from "./Logout";
 import Basket from "./BasketIcon";
 
 function Header() {
+  //Retrieves the user's email address from local browser storage so it can be displayed in the header 
   const emailAddress = localStorage.getItem('email');
   return (
     <AppBar position="static" style={{backgroundColor: "white"}}>

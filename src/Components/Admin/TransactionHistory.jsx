@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 
-
 function TransactionHistory(){
     //Variable that determining if there is a transaction history to display
     const [historyData, setHistoryData] = useState([]);

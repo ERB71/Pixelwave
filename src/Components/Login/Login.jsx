@@ -8,16 +8,16 @@ import logo from "../Header/PixelWave.png";
 
 function Login() {
    //Query to create default admin user
-   useEffect(() => {
-      const createAdmin = async() => {
-         try{
-            axios.post(`http://localhost:3001/user/createAdmin`);
-         }
-         catch{
-            console.log("error creating admin")
-         }
+   const createAdmin = async() => {
+      try{
+         axios.post(`http://localhost:3001/user/createAdmin`);
       }
-      createAdmin()
+      catch{
+         console.log("error creating admin")
+      }
+   }
+   useEffect(() => {
+      createAdmin();
    }, []);
 
    const [emailAddressReg, setEmailAddressReg] = useState("");

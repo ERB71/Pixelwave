@@ -1,5 +1,6 @@
 import { Grid } from "@mui/material"
 
+//This function formats and implements the three images related to the 'boots' section of the home page
 function ImageGrid(){
     return(
         <div style={{ height: "25%", display: "flex", flexDirection: "column", flexWrap: "noWrap", alignItems: "center", justifyContent: "center"}}>
