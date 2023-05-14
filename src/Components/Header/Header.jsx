@@ -17,7 +17,7 @@ function Header() {
           </Link>
           <Typography color = {"blue"} fontSize={"4vw"} fontWeight={"bold"} lineHeight={"100%"} width={"40%"}>FOOTBALL MERCHANDISING</Typography>
           <div style={{ width: "20%", display: "flex", flexDirection: "column", marginRight: "2px" }}>
-            <Typography color = {"blue"} fontSize={"1.5vw"} lineHeight={"100%"} marginBottom={"3px"}> Logged in as: {emailAddress}</Typography>
+            <Typography color = {"blue"} fontSize={"1vw"} lineHeight={"100%"} marginBottom={"3px"}> Logged in as: {emailAddress}</Typography>
             <Logout />
           </div>
           <Basket />

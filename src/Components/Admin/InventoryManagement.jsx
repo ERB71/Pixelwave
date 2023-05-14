@@ -18,7 +18,7 @@ function InventoryManagement() {
 
     const getInventory = async () => {
     try {    
-        const inventoryQuery = await axios.get(`http://localhost:3001/getAllProducts`);
+        const inventoryQuery = await axios.get(`http://localhost:3001/admin/getAllProducts`);
         const inventory = inventoryQuery.data;
 
         const updatedProducts = [];
@@ -91,13 +91,12 @@ function InventoryManagement() {
                 tempQuantity: (tempStockLevel + 1),
                 productID: id
             });
-
             setAlertMessage({ severity: "success", message: "Inventory Updated" });
             getInventory();
-            setAlertOpen(true);
         } catch {
             setAlertMessage({ severity: "error", message: "Error Updating Inventory"})
         };
+        setAlertOpen(true);
     }
 
 

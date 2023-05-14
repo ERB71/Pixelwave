@@ -17,6 +17,7 @@ app.use(
     })
 );
 
+//Query that will create a new user when they select the 'register' option on the login page
 app.post('/user/register', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -50,7 +51,7 @@ app.post('/user/register', (req, res) => {
     });
 });
 
-
+//Query that determines if the credentials provided in the login boxes correspond with an user stored in the database
 app.get('/user/login', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -74,6 +75,7 @@ app.get('/user/login', (req, res) => {
         }
         else{
             const hashedPassword = data[0].hashedPassword;
+            //hashing the password with bcrypt and comparing the value with the one stored in the database for the user with the email address provided
             bcrypt.compare(password, hashedPassword, (err, result) => {
                 if (err) {
                     res.status(500).send(err);
@@ -88,28 +90,7 @@ app.get('/user/login', (req, res) => {
     });
 });
 
-app.get("/getAllProducts", (req, res) => {
-    const dbConnection = mysql2.createPool({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-    })
-
-    const query = "SELECT * from Products";
-
-    dbConnection.query(query, (err, data) => {
-        if (err){
-            res.status(404).send(err);
-        }
-        else{
-            console.log(data);
-            res.status(200).send(data);
-        }
-    });
-});
-
-
+//Query to retrieve all products that are in stock and belong to the shirts category 
 app.get("/getShirts", (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -132,6 +113,7 @@ app.get("/getShirts", (req, res) => {
     });
 });
 
+//Query to retrieve all products that are in stock and belong to the boots category 
 app.get("/getBoots", (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -154,6 +136,7 @@ app.get("/getBoots", (req, res) => {
     });
 });
 
+//Query to retrieve a specific product when it is clicked on from the corresponding item page 
 app.get("/getSpecificProduct/:id", (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -177,6 +160,7 @@ app.get("/getSpecificProduct/:id", (req, res) => {
     });
 });
 
+//Query to retrieve the userID of an account based upon the email address provided (which is stored in the browser's local sotrage on the front end)
 app.get('/user/getUserId', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -199,6 +183,7 @@ app.get('/user/getUserId', (req, res) => {
     })
 });
 
+//Query to retrieve the role (general or admin) of an account based upon the email address provided
 app.get('/user/getRole', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -221,6 +206,58 @@ app.get('/user/getRole', (req, res) => {
     })
 });
 
+//Query to get the temporary stock level of an item
+app.get('/getTempStockLevel', (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    let query = 'SELECT tempStockLevel FROM products WHERE productId = ?';
+    let queryParam = req.query.productId;
+
+    dbConnection.query(query, queryParam, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            console.log("tempStockLevel:", data);
+            res.status(200).send(data);
+        }
+        dbConnection.end();
+    })
+})
+
+//Query to retrieve the basket of a user
+app.get('/basket/getBasket', (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    let query = `SELECT productId, quantity FROM basket WHERE userId = ?`;
+    let queryParams = req.query.userId;
+
+    dbConnection.query(query, queryParams, (err, data) => {
+        if (err){
+            res.status(500).send(err);
+        }
+        else if (data.length === 0){
+            res.status(404).send()
+        }
+        else{
+            console.log(data)
+            res.status(200).send(data)
+        }
+        dbConnection.end();
+    });
+});
+
+//Query that updates a user's basket
 app.post('/basket/updateBasket', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -233,6 +270,7 @@ app.post('/basket/updateBasket', (req, res) => {
     const productId = req.body["productID"]
     const quantity = req.body["quantity"]
 
+    //This query checks to see whether the product already exists in the users basket
     let query = `SELECT IFNULL(quantity, 0) AS quantity FROM basket WHERE userId = ? AND productId = ?`;
     let queryParams = [userId, productId]
 
@@ -241,6 +279,7 @@ app.post('/basket/updateBasket', (req, res) => {
             res.status(400).send(err)
         }
         else{ 
+            //If the product isn't already in the basket, it is inserted into it
             if (data.length === 0){
                 let insertQuery = `INSERT INTO basket (userId, productId, quantity) VALUES (?, ?, ?)`;
                 let insertParams = [userId, productId, quantity]
@@ -248,6 +287,7 @@ app.post('/basket/updateBasket', (req, res) => {
                     if (err){
                         res.status(400).send(err)
                     }
+                    //Check to see if there is the maximum number already in the basket
                     else{
                         let currentStockLevel = `SELECT stockLevel FROM products WHERE productId = ${productId}`;
                         dbConnection.query(currentStockLevel, (err, data) => {
@@ -272,13 +312,16 @@ app.post('/basket/updateBasket', (req, res) => {
                 })
             }
             else{
+                //If the product is already in the basket, the quantity value is updated 
                 let newQuantity = data[0].quantity + quantity;
                 let updateQuery = `UPDATE basket SET quantity = ? WHERE userId = ? AND productId = ?`;
                 let updateParams = [newQuantity, userId, productId];
                 dbConnection.query(updateQuery, updateParams, (err, data) => {
                     if (err){
                         res.status(400).send(err);
-                    } else {
+                    } 
+                    //Check to see if there is the maximum number already in the basket
+                    else {
                         let currentStockLevelQuery = `SELECT stockLevel FROM products WHERE productId = ${productId}`;
                         dbConnection.query(currentStockLevelQuery, (err, currentStockLevelData) => {
                             if (err) {
@@ -304,7 +347,7 @@ app.post('/basket/updateBasket', (req, res) => {
     });
 });
 
-
+//Query to reduce the quantity of the referenced item in a user's basket by 1
 app.post('/basket/reduceCount', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -387,7 +430,7 @@ app.post('/basket/reduceCount', (req, res) => {
     });
 });
 
-
+//Query to increase the quantity of the referenced item in a user's basket by 1 (up to the maximum allowed, which is detereined by the tempStockLevel of the referenced product)
 app.post('/basket/increaseCount', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -434,34 +477,7 @@ app.post('/basket/increaseCount', (req, res) => {
     });
 });
 
-
-app.get('/basket/getBasket', (req, res) => {
-    const dbConnection = mysql2.createPool({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-    })
-
-    let query = `SELECT productId, quantity FROM basket WHERE userId = ?`;
-    let queryParams = req.query.userId;
-
-    dbConnection.query(query, queryParams, (err, data) => {
-        if (err){
-            res.status(500).send(err);
-        }
-        else if (data.length === 0){
-            res.status(404).send()
-        }
-        else{
-            console.log(data)
-            res.status(200).send(data)
-        }
-        dbConnection.end();
-    });
- });
-
-
+//Query to remove an item from a user's item
 app.post('/basket/deleteBasketItem', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -502,6 +518,29 @@ app.post('/basket/deleteBasketItem', (req, res) => {
     });
 });
 
+//Query to retrieve all products stored in the database so that they be displayed on the admin page
+app.get("/admin/getAllProducts", (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    const query = "SELECT * from Products";
+
+    dbConnection.query(query, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            console.log(data);
+            res.status(200).send(data);
+        }
+    });
+});
+
+//Query to update the quantity of the referenced product by 1
 app.post('/inventory/updateInventoryQuantity', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -536,7 +575,7 @@ app.post('/inventory/updateInventoryQuantity', (req, res) => {
     });
 });
 
-
+//Query to remove a product from the product table
 app.post('/inventory/deleteInventoryItem', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -558,29 +597,7 @@ app.post('/inventory/deleteInventoryItem', (req, res) => {
     });
 });
 
-app.get('/getTempStockLevel', (req, res) => {
-    const dbConnection = mysql2.createPool({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-    })
-
-    let query = 'SELECT tempStockLevel FROM products WHERE productId = ?';
-    let queryParam = req.query.productId;
-
-    dbConnection.query(query, queryParam, (err, data) => {
-        if (err){
-            res.status(404).send(err);
-        }
-        else{
-            console.log("tempStockLevel:", data);
-            res.status(200).send(data);
-        }
-        dbConnection.end();
-    })
-})
-
+//Query to retrieve the transaction history of the application
 app.get('/admin/getTransactionHistory', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
@@ -589,7 +606,7 @@ app.get('/admin/getTransactionHistory', (req, res) => {
         password: process.env.DATABASE_PASSWORD,
     })
 
-    let query = 'SELECT * from transactionhistory';
+    let query = `SELECT userId, total, DATE_FORMAT(transactionDate, '%d/%m/%Y %H:%i:%s') as transactionDate from transactionhistory`;
 
     dbConnection.query(query, (err, data) => {
         if (err){
@@ -602,6 +619,79 @@ app.get('/admin/getTransactionHistory', (req, res) => {
     })
 })
 
+//Query to retrieve all non-admin users
+app.get('/admin/getGeneralUsers', (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    let query = `SELECT userId, emailAddress from user where role = 'General'`;
+
+    dbConnection.query(query, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            res.status(200).send(data);
+        }
+        dbConnection.end();
+    })
+})
+
+//Query to upgrade user to the role of admin
+app.post('/admin/upgradeUser', (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    const userId = req.body["userID"] 
+
+    let query = `update user set role = 'admin' where userId = ?`;
+    let queryParam = userId;
+
+    dbConnection.query(query, queryParam, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            res.status(200).send(data);
+        }
+        dbConnection.end();
+    })
+})
+
+//Query to delete user
+app.post('/admin/deleteUser', (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    const userId = req.body["userID"] 
+
+    let query = `delete from user where userId = ?`;
+    let queryParam = userId;
+
+    dbConnection.query(query, queryParam, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            res.status(200).send(data);
+        }
+        dbConnection.end();
+    })
+})
+
+//Query to create an admin account at application startup to ensure that one always exists
 app.post('/user/createAdmin', (req, res) => {
     const dbConnection = mysql2.createPool({
         host: process.env.DATABASE_HOST,
