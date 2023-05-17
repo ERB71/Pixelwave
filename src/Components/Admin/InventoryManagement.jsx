@@ -60,7 +60,7 @@ function InventoryManagement() {
             console.log(id)
             const tempStockLevelQuery = await axios.get(`http://localhost:3001/getTempStockLevel?productId=${id}`);
             let tempStockLevel = tempStockLevelQuery.data[0].tempStockLevel;
-            //logic to ensure tha tempStockLevel doesn't become negative
+            //logic to ensure that tempStockLevel doesn't become negative
             if (tempStockLevel == 0){
                 tempStockLevel ++;
             }

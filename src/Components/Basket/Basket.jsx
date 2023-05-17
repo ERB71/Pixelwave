@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Grid, Card, CardContent, CardMedia, Snackbar, Typography, Button } from "@mui/material";
 import { Add, Delete, Remove } from '@material-ui/icons';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "./Basket.css"
+import PixelWave from "../Header/PixelWave.png"
 
 function BasketContent() {
     const [basketData, setBasketData] = useState(null);
@@ -13,6 +15,10 @@ function BasketContent() {
 
     const [alertMessage, setAlertMessage] = useState({ severity: "success", message: "Placeholder" });
     const [alertOpen, setAlertOpen] = useState(false);
+    const [showOverlay, setShowOverlay] = useState(false);
+
+    const navigate = useNavigate();
+    const productIds = updatedProducts.map((product) => product.productId);
 
     const handleAlertClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -170,8 +176,55 @@ function BasketContent() {
         getBasket();
     }, []);
 
+    useEffect(() => {
+        if (showOverlay) {
+          const timer = setTimeout(() => {
+            setShowOverlay(false);
+            navigate('/home'); 
+        }, 7000);
+    
+          return () => clearTimeout(timer);
+        }
+      }, [showOverlay]);
+
+
+    const updateTransactionHistory = async() => {
+        const userIdQuery = await axios.get(
+            `http://localhost:3001/user/getUserId?emailAddress=${localStorage.getItem("email")}`
+        );
+        const userId = userIdQuery.data[0].userId;
+        await axios.post(`http://localhost:3001/updateTransactionHistory`, {
+            userID: userId,
+            total: orderTotal,
+            productIDs: productIds,
+        });
+
+        setShowOverlay(true);
+
+        // Redirect to home page after a delay of 7 seconds
+        setTimeout(() => {
+            navigate('/home'); 
+        }, 7000);
+    };
+
+    //redirect user to home page if they close the overlay before 3 seconds has elapsed
+    const handleOverlayClick = () => {
+        setShowOverlay(false);
+        navigate('/home');
+      };
+
     return (
         <div>
+            {showOverlay && (
+                <div className="overlay" onClick={handleOverlayClick}>
+                    <div className="popup">
+                        <img src={PixelWave} alt="Pixelwave Logo" className="logo" />
+                        <p className="message">
+                        Order Complete, Check Your Email Shortly For Confirmation of Your Order. Thanks For Shopping with Pixelwave
+                        </p>
+                    </div>
+                </div>
+            )}
         {basketData ? (
             <>
                 <Typography color={"blue"} display={"flex"} fontSize={"3vw"} marginLeft={"1%"} marginTop={"1%"}> Your Basket </Typography>
@@ -268,7 +321,7 @@ function BasketContent() {
                         <div style={{ display: "flex", justifyContent: "center", margin: "1%" }}>
                             <Button variant = "contained" sx={{ width: "75%", backgroundColor: 'blue', color: 'white', border: "1px solid red",   
                             "&:hover": { backgroundColor: 'red', border: "1px solid blue"}}}
-                            > Checkout </Button>
+                            onClick = {() => updateTransactionHistory()}> Checkout </Button>
                         </div>
                     </Grid>
                 </Box>

@@ -597,6 +597,66 @@ app.post('/inventory/deleteInventoryItem', (req, res) => {
     });
 });
 
+//Query to update the transaction history when a user checks out 
+app.post('/updateTransactionHistory', (req, res) => {
+    const dbConnection = mysql2.createPool({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USERNAME,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+    })
+
+    const userId = req.body["userID"]
+    const total = req.body["total"]
+    const productIds = req.body["productIDs"]
+
+    let query = `Insert INTO transactionhistory (userId, total) values (?, ?)`;
+    let queryParams = [userId, total];
+
+    dbConnection.query(query, queryParams, (err, data) => {
+        if (err){
+            res.status(404).send(err);
+        }
+        else{
+            productIds.forEach((productId) => {
+                let stockLevelQuery = `SELECT stockLevel FROM products WHERE productId = ${productId}`;
+                dbConnection.query(stockLevelQuery, (err, stockLevelData) => {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    let currentStockLevel = stockLevelData[0].stockLevel;
+                    let quantityQuery = `SELECT quantity FROM basket WHERE productId = ${productId} and userId = ${userId}`
+                    dbConnection.query(quantityQuery, (err, quantityData) => {
+                        if (err) {
+                            res.status(500).send(err);
+                        }
+                        else{
+                            const quantity = quantityData[0].quantity; 
+                            const newStockLevel = currentStockLevel - quantity;
+                            let productsQuery = `UPDATE products SET stockLevel = ${newStockLevel} WHERE productId = ${productId}`;
+                            dbConnection.query(productsQuery, (err, data) => {
+                                if (err) {
+                                    res.status(500).send(err);
+                                } 
+                                else {
+                                    let basketQuery = `delete from basket where userId = ${userId}`;
+                                    dbConnection.query(basketQuery, (err, data) => {
+                                        if (err){
+                                            res.status(500).send(err)
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+                });
+            });
+            res.status(200).send(data);
+        }
+    })
+})
+
 //Query to retrieve the transaction history of the application
 app.get('/admin/getTransactionHistory', (req, res) => {
     const dbConnection = mysql2.createPool({
@@ -606,7 +666,7 @@ app.get('/admin/getTransactionHistory', (req, res) => {
         password: process.env.DATABASE_PASSWORD,
     })
 
-    let query = `SELECT userId, total, DATE_FORMAT(transactionDate, '%d/%m/%Y %H:%i:%s') as transactionDate from transactionhistory`;
+    let query = `SELECT userId, total, DATE_FORMAT(transactionDate, '%d/%m/%Y %H:%i') as transactionDate from transactionhistory`;
 
     dbConnection.query(query, (err, data) => {
         if (err){
