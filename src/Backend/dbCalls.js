@@ -92,47 +92,83 @@ app.get('/user/login', (req, res) => {
 
 //Query to retrieve all products that are in stock and belong to the shirts category 
 app.get("/getShirts", (req, res) => {
+    const searchTerm = req.query.searchTerm || "";
+    const categories = req.query.categories || "";
+    const colours = req.query.colours || "";
+  
     const dbConnection = mysql2.createPool({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-    })
-
-    const query = "SELECT * from Products where categories like '%Shirts%' AND tempStockLevel > 0";
-
-    dbConnection.query(query, (err, data) => {
-        if (err){
-            res.status(404).send(err);
-        }
-        else{
-            console.log(data);
-            res.status(200).send(data);
-        }
-        dbConnection.end();
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USERNAME,
+      database: process.env.DATABASE_NAME,
+      password: process.env.DATABASE_PASSWORD,
+    });
+  
+    //Base query to retrieve all shirts in stock
+    let query = "SELECT * from Products WHERE categories LIKE '%Shirts%' AND categories LIKE ? AND tempStockLevel > 0";
+    
+    //conditional that determines if the users have applied and additional category filter, which is added to the query if they have
+    let params = [`%${categories}%`];
+  
+    //conditional that determines if the users have searched for anything, which is added to the query if they have
+    if (searchTerm !== "") {
+      query += " AND name LIKE ?";
+      params.push(`%${searchTerm}%`);
+    }
+  
+    //conditional that determines if the users have applied a colour filter, which is added to the query if they have
+    if (colours !== "") {
+      query += " AND colours LIKE ?";
+      params.push(`%${colours}%`);
+    }
+  
+    dbConnection.query(query, params, (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(data);
+      }
+      dbConnection.end();
     });
 });
 
 //Query to retrieve all products that are in stock and belong to the boots category 
 app.get("/getBoots", (req, res) => {
+    const searchTerm = req.query.searchTerm || "";
+    const categories = req.query.categories || "";
+    const colours = req.query.colours || "";
+  
     const dbConnection = mysql2.createPool({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USERNAME,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-    })
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USERNAME,
+      database: process.env.DATABASE_NAME,
+      password: process.env.DATABASE_PASSWORD,
+    });
+  
+    //Base query to retrieve all boots in stock
+    let query = "SELECT * from Products WHERE categories LIKE '%Boots' AND categories LIKE ? AND tempStockLevel > 0";
+        
+    //conditional that determines if the users have applied and additional category filter, which is added to the query if they have
+    let params = [`%${categories}%`];
 
-    const query = "SELECT * from Products where categories like '%Boots%' AND tempStockLevel > 0";
+    //conditional that determines if the users have searched for anything, which is added to the query if they have
+    if (searchTerm !== "") {
+    query += " AND name LIKE ?";
+    params.push(`%${searchTerm}%`);
+    }
 
-    dbConnection.query(query, (err, data) => {
-        if (err){
-            res.status(404).send(err);
-        }
-        else{
-            console.log(data);
-            res.status(200).send(data);
-        }
-        dbConnection.end();
+    //conditional that determines if the users have applied a colour filter, which is added to the query if they have
+    if (colours !== "") {
+    query += " AND colours LIKE ?";
+    params.push(`%${colours}%`);
+    }
+    
+    dbConnection.query(query, params, (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(data);
+      }
+      dbConnection.end();
     });
 });
 
@@ -678,6 +714,33 @@ app.get('/admin/getTransactionHistory', (req, res) => {
         dbConnection.end();
     })
 })
+
+//Query to retrieve a user's email address from their userId, for use in generating the transactionHistory
+app.get('/admin/getUserEmail', (req, res) => {
+    const dbConnection = mysql2.createPool({
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USERNAME,
+      database: process.env.DATABASE_NAME,
+      password: process.env.DATABASE_PASSWORD,
+    });
+  
+    const userId = req.query.userId;
+    const query = `SELECT emailAddress FROM user WHERE userId = ${userId}`;
+  
+    dbConnection.query(query, (err, data) => {
+      if (err) {
+        res.status(404).send(err);
+      } else {
+        if (data.length > 0) {
+          res.status(200).send(data[0]);
+        } else {
+          res.status(404).send("User not found");
+        }
+      }
+      dbConnection.end();
+    });
+});  
+
 
 //Query to retrieve all non-admin users
 app.get('/admin/getGeneralUsers', (req, res) => {

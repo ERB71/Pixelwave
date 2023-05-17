@@ -7,10 +7,23 @@ function TransactionHistory(){
     const [historyData, setHistoryData] = useState([]);
 
     const getTransactionHistory = async () => {
-        //Query to get transaction history
-        const historyQuery = await axios.get(`http://localhost:3001/admin/getTransactionHistory`);
-        setHistoryData(historyQuery.data);
-    }
+        try {
+          // Query to get transaction history
+          const historyQuery = await axios.get(`http://localhost:3001/admin/getTransactionHistory`);
+      
+          // Iterate through the history data and fetch email addresses for each userId
+          const historyData = historyQuery.data;
+          for (const transaction of historyData) {
+            const userId = transaction.userId;
+            const emailQuery = await axios.get(`http://localhost:3001/admin/getUserEmail?userId=${userId}`);
+            transaction.email = emailQuery.data.emailAddress;
+          }
+      
+          setHistoryData(historyData);
+        } catch (error) {
+          console.error(error);
+        }
+      }      
     useEffect(() => {
         getTransactionHistory();
     }, []);
@@ -24,14 +37,14 @@ function TransactionHistory(){
                     <Grid container width = "98%" margin="1%">
                         <Grid item xs={12} >
                             <Grid container justifyContent="space-between" borderBottom = "1px solid blue">
-                                <Grid item xs={4}>
-                                    <Typography variant="h1" fontSize={"3vw"} align="center">User ID</Typography>
+                                <Grid item xs={6}>
+                                    <Typography variant="h1" fontSize={"3vw"} align="center">User</Typography>
                                 </Grid>
-                                <Grid item xs={4} borderLeft = "1px solid blue" borderRight ={"1px solid blue"}>
-                                    <Typography variant="h1" fontSize={"3vw"} align="center">Transaction Total</Typography>
+                                <Grid item xs={3} borderLeft = "1px solid blue" borderRight ={"1px solid blue"}>
+                                    <Typography variant="h1" fontSize={"3vw"} align="center">Total</Typography>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <Typography variant="h1" fontSize={"3vw"} align="center">Transaction Date</Typography>
+                                <Grid item xs={3}>
+                                    <Typography variant="h1" fontSize={"3vw"} align="center">Date</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -39,13 +52,13 @@ function TransactionHistory(){
                         {historyData.map((transaction) => (   
                             <Grid item xs={12} key={transaction.id}>
                                 <Grid container justifyContent="space-between">
-                                    <Grid item xs={4} >
-                                        <Typography variant="h1" fontSize={"3vw"} align="center">{transaction.userId}</Typography>
+                                    <Grid item xs={6} >
+                                        <Typography variant="h1" fontSize={"3vw"} align="center">{transaction.email}</Typography>
                                     </Grid>
-                                    <Grid item xs={4} borderLeft = "1px solid blue" borderRight ={"1px solid blue"}>
+                                    <Grid item xs={3} borderLeft = "1px solid blue" borderRight ={"1px solid blue"}>
                                         <Typography variant="h1" fontSize={"3vw"} align="center">£{transaction.total.toFixed(2)}</Typography>
                                     </Grid>
-                                    <Grid item xs={4} >
+                                    <Grid item xs={3} >
                                         <Typography variant="h1" fontSize={"3vw"} align="center">{transaction.transactionDate}</Typography>
                                     </Grid>
                                 </Grid>
