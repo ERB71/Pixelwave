@@ -220,7 +220,7 @@ function BasketContent() {
                     <div className="popup">
                         <img src={PixelWave} alt="Pixelwave Logo" className="logo" />
                         <p className="message">
-                        Order Complete, Check Your Email Shortly For Confirmation of Your Order. Thanks For Shopping with Pixelwave
+                        Order Completed. Thanks For Shopping with Pixelwave
                         </p>
                     </div>
                 </div>
