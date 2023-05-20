@@ -51,7 +51,7 @@ function ShirtsListing() {
         ) : (
           products.map((product) => (
             <Grid item key={product.id} xs={12} sm={6} md={4}>
-              <Link to={`/product/${product.productID}`} style={{ textDecoration: 'none' }}>
+              <Link to={`/product/${product.productId}`} style={{ textDecoration: 'none' }}>
               <Card 
                  sx={{
                   display: 'flex',

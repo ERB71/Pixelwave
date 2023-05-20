@@ -145,7 +145,7 @@ app.get("/getBoots", (req, res) => {
     });
   
     //Base query to retrieve all boots in stock
-    let query = "SELECT * from Products WHERE categories LIKE '%Boots' AND categories LIKE ? AND tempStockLevel > 0";
+    let query = "SELECT * from Products WHERE categories LIKE '%Boots%' AND categories LIKE ? AND tempStockLevel > 0";
         
     //conditional that determines if the users have applied and additional category filter, which is added to the query if they have
     let params = [`%${categories}%`];

@@ -25,7 +25,7 @@ function InventoryManagement() {
     
         for (let i = 0; i < inventory.length; i++) {
             const item = inventory[i];
-            const productId = item.productID;
+            const productId = item.productId ;
             const quantity = item.stockLevel;
     
             try {

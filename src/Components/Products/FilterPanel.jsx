@@ -18,13 +18,13 @@ const BootsFilterPanel = ({ filters, onChange }) => {
       <select value={filters.colours} onChange={handleColourChange} style={{color: "blue", fontSize: "2vw", borderColor: "red", marginRight: "10%"}}>
         <option value="">All</option>
         <option value="Black">Black</option>
-        <option value="Blue">Blue</option>
+        <option value="Bronze">Bronze</option>
         <option value="Green">Green</option>
         <option value="Grey">Grey</option>
         <option value="Orange">Orange</option>
         <option value="Pink">Pink</option>
-        <option value="Red">Red</option>
         <option value="White">White</option>
+        <option value="Yellow">Yellow</option>
       </select>
 
       <Typography color={"blue"} fontSize={"2vw"} marginRight={"2%"}>Category</Typography>
