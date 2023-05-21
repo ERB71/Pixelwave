@@ -97,15 +97,22 @@ function BasketContent() {
                 `http://localhost:3001/user/getUserId?emailAddress=${localStorage.getItem("email")}`
             );
             const userId = userIdQuery.data[0].userId;
-            //This query is the one that reduces the quantity. On the backend, there is a check that is perfomred if the quantity reaches 0. If this occurs, the tem is removed from the basket
-            await axios.post(`http://localhost:3001/basket/reduceCount`, {
-                userID: userId,
-                productID: id,
-                quantity: (quantity - 1),
-            });
-            setAlertMessage({ severity: "success", message: "Basket Updated" });
-            getBasket();
-            setAlertOpen(true);
+
+            quantity = quantity - 1
+            if (quantity === 0){
+                deleteBasketItem(id)
+            }
+            else{
+                //This query is the one that reduces the quantity.
+                await axios.post(`http://localhost:3001/basket/reduceCount`, {
+                    userID: userId,
+                    productID: id,
+                    quantity: quantity,
+                });
+                setAlertMessage({ severity: "success", message: "Basket Updated" });
+                getBasket();
+                setAlertOpen(true);
+            }
         } catch {
             setAlertMessage({ severity: "error", message: "Error Updating Basket"})
             setAlertOpen(true);
